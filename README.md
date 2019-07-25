@@ -7,6 +7,8 @@ Thankfully there is a way to shrink an image, though every tutorial i've seen
 online is cumbersome and manual (e.g. using gparted). Instead I wrote a script
 that does it automatically and shrinks the image to it's minimal size.
 
+NOTE: USE AT OWN RISK - THIS IS UNTESTED. ALWAYS BACKUP YOUR IMAGE BEFORE TRYING
+THIS.
 
 ## Copy the sd card over 
 
