@@ -30,8 +30,8 @@ echo "NEW SIZE of partition: $NEWSIZE  512-blocks"
 # now pipe commands to fdisk
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | sudo fdisk /dev/loop0 || echo "Ignore that error."
   p # print the in-memory partition table
-  d # delete partition 
-  2 # partition 2 
+  d # delete partition
+  2 # partition 2
   n # new partition
   p # primary partition
   2 # partion number 2
@@ -47,17 +47,17 @@ sudo fdisk -l $1
 sudo fdisk -l $1 > /tmp/fdisk_new.log
 sudo losetup -d /dev/loop0
 
-FINALEND_BYTES=$(cat /tmp/fdisk.log | grep "83 Linux" | awk '{print ($3+1)*512}')
+FINALEND_BYTES=$(cat /tmp/fdisk_new.log | grep "83 Linux" | awk '{print ($3+1)*512}')
 echo "TRUNCATE AT: $FINALEND_BYTES bytes"
 
 # Truncate the image file on disk
-sudo truncate -s $FINALEND_BYTES $1 
+sudo truncate -s $FINALEND_BYTES $1
 
 # Fill the empty space with zeros for better compressability
-sudo losetup /dev/loop0 $1 
+sudo losetup /dev/loop0 $1
 sudo partprobe /dev/loop0
-sudo mkdir -p /tmp/mountpoint 
-sudo mount /dev/loop0p2 /tmp/mountpoint 
+sudo mkdir -p /tmp/mountpoint
+sudo mount /dev/loop0p2 /tmp/mountpoint
 sudo dd if=/dev/zero of=/tmp/mountpoint/zero.txt  status=progress || echo "Expected to fail with out of space"
 sudo rm /tmp/mountpoint/zero.txt
 df -h /tmp/mountpoint
@@ -65,8 +65,7 @@ sudo umount /tmp/mountpoint
 lsblk
 sudo rmdir /tmp/mountpoint
 
+echo "We're done. Final info: "
 sudo fdisk -l $1
 sudo dumpe2fs -h /dev/loop0p2 | tee /tmp/dumpe2fs
 sudo losetup -d /dev/loop0
-echo "We're done. Final info above."
-
