@@ -47,7 +47,7 @@ sudo fdisk -l $1
 sudo fdisk -l $1 > /tmp/fdisk_new.log
 sudo losetup -d /dev/loop0
 
-FINALEND_BYTES=$(cat /tmp/fdisk_new.log | grep "83 Linux" | awk '{print ($3+1)*512}')
+FINALEND_BYTES=$(cat /tmp/fdisk_new.log | grep "83 Linux" | awk '{printf "%.0f",($3+1)*512}')
 echo "TRUNCATE AT: $FINALEND_BYTES bytes"
 
 # Truncate the image file on disk
